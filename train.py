@@ -1,4 +1,5 @@
 from data import *
+from ssd import build_ssd
 
 import argparse
 import os
@@ -16,9 +17,12 @@ args = parser.parse_args()
 def train():
     # load data
     if args.dataset == 'VOC':
-        dataset = VOCDetection(root=args.dataset_root,
-                               transform=None)
         cfg = voc
+        dataset = VOCDetection(root=args.dataset_root,
+                               transform=BaseTransform(cfg['min_dim'], 
+                                                      MEANS))
+    
+    #ssd_net = build_ssd('train', cfg['min_dim'], cfg['num_classes'])
 
     data_loader = data.DataLoader(dataset, batch_size=2,
                                   num_workers=args.num_workers,
@@ -26,11 +30,8 @@ def train():
                                   collate_fn=detection_collate,
                                   pin_memory=True)
     
-    ssd_net = build_ssd('train', )
-
     for images, targets in data_loader:
-        import pdb
-        pdb.set_trace()
+        print(images.shape)
     
 if __name__ == "__main__":
     train()

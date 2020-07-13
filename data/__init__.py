@@ -1,4 +1,4 @@
-from .voc import VOCDetection, VOC_ROOT, VOC_CLASSES, voc
+from .voc import *
 
 import cv2
 import torch
@@ -12,16 +12,16 @@ def detection_collate(batch):
         targets.append(torch.FloatTensor(sample[1]))
     return torch.stack(imgs, 0), targets
 
-def base_transform(self, img, size, mean):
+def base_transform(img, size, mean):
     x = cv2.resize(img, (size, size)).astype(np.float32)
     x = x - mean
     x = x.astype(np.float32)
     return x
 
-class Transform:
+class BaseTransform:
     def __init__(self, size, mean):
         self.size = size
         self.mean = np.array(mean, dtype=np.float32)
 
-    def transform(self, image, boxes, labels):
+    def __call__(self, image, boxes=None, labels=None):
         return base_transform(image, self.size, self.mean), boxes, labels

@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 
 import cv2
+import numpy as np
 import os.path
 import torch
 import torch.utils.data as data
@@ -17,6 +18,8 @@ VOC_CLASSES = (  # always index 0
     'sheep', 'sofa', 'train', 'tvmonitor')
 
 VOC_ROOT = os.path.join(HOME, "data/VOCdevkit")
+
+MEANS = (104, 117, 123)
 
 # SSD300 CONFIGS
 voc = {
